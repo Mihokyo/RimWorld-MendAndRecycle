@@ -6,6 +6,6 @@
 	<TableMending.label>table de réparation</TableMending.label> 
 	
 	<!-- EN: A workbench equipped with all the tools required to mend and repair damaged items. Requires power and consumes mending kits. Mending kits can be made in the crafting spot first. -->
-	<TableMending.description>Un établi équipé de tous les outils nécessaires pour réparer et réparer les éléments endommagés. Nécessite de l'énergie et consomme des kits de réparation. Les kits de réparation peuvent être fabriqués d'abord sur le site de fabrication.</TableMending.description> 
+	<TableMending.description>Un établi équipé de tous les outils nécessaires pour remettre en état les éléments endommagés. Nécessite de l'énergie et consomme des kits de réparation. Les kits de réparation peuvent être fabriqués avec l'établi de tissage.</TableMending.description> 
 	
 </LanguageData>

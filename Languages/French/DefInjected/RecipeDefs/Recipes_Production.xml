@@ -6,7 +6,7 @@
 	<MakeMendingKit.label>faire un kit de réparation</MakeMendingKit.label> 
 	
 	<!-- EN: Crafts mending kits from materials. Produces enough to re-stock the mending table. -->
-	<MakeMendingKit.description>Création d'un kit de réparation à partir de matériaux. Crée suffisamment de kits pour alimenter l'atelier de réparation.</MakeMendingKit.description>
+	<MakeMendingKit.description>Création d'un kit de réparation à partir de matériaux. Crée suffisamment de kits pour alimenter la table de réparation.</MakeMendingKit.description>
 	
 	<!-- EN: Crafting mending kit. -->
 	<MakeMendingKit.jobString>Fait un kit de réparation</MakeMendingKit.jobString> 

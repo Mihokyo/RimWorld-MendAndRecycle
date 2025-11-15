@@ -46,7 +46,7 @@
 	<RecycleApparel.label>recycler des vêtements</RecycleApparel.label> 
 	
 	<!-- EN: Recycle apparel into their basic components. -->
-	<RecycleApparel.description>Transformation des vêtements en leurs composants constitutifs.</RecycleApparel.description> 
+	<RecycleApparel.description>Recycle et transforme des vêtements en leurs matières premières.</RecycleApparel.description> 
 	
 	<!-- EN: Recycling. -->
 	<RecycleApparel.jobString>recycle</RecycleApparel.jobString> 
