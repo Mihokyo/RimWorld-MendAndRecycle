@@ -83,7 +83,7 @@ namespace MendAndRecycle
                         MoteMaker.ThrowText(pawn.DrawPos, pawn.Map, "Failed");
                     }
 
-                    pawn.GainComfortFromCellIfPossible ();
+                    pawn.GainComfortFromCellIfPossible (1);
 
                     if (objectThing.HitPoints <= 0) {
                         pawn.Map.reservationManager.Release (job.targetB, pawn, job);

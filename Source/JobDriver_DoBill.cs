@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-
 using RimWorld;
-using UnityEngine;
 using Verse;
 using Verse.AI;
 
@@ -11,7 +9,8 @@ namespace MendAndRecycle
     {
         protected override IEnumerable<Toil> MakeNewToils ()
         {
-            AddEndCondition(delegate {
+            AddEndCondition(delegate
+            {
                 var thing = GetActor().jobs.curJob.GetTarget(BillGiverInd).Thing;
                 if (thing is Building && !thing.Spawned)
                 {
@@ -20,7 +19,8 @@ namespace MendAndRecycle
                 return JobCondition.Ongoing;
             });
             this.FailOnBurningImmobile(BillGiverInd);
-            this.FailOn(delegate {
+            this.FailOn(delegate
+            {
                 if (job.GetTarget(BillGiverInd).Thing is IBillGiver billGiver)
                 {
                     if (job.bill.DeletedOrDereferenced)
@@ -37,33 +37,54 @@ namespace MendAndRecycle
 
             yield return Toils_Reserve.Reserve(BillGiverInd, 1);
             yield return Toils_Reserve.ReserveQueue(IngredientInd, 1);
-            yield return Toils_JobTransforms.ExtractNextTargetFromQueue(IngredientInd);
-            yield return Toils_Goto.GotoThing(IngredientInd, PathEndMode.ClosestTouch);
-            yield return Toils_Haul.StartCarryThing(IngredientInd);
-            yield return Toils_Goto.GotoThing(BillGiverInd, PathEndMode.InteractionCell);
-            yield return Toils_JobTransforms.SetTargetToIngredientPlaceCell(BillGiverInd, IngredientInd, IngredientPlaceCellInd);
-            yield return Toils_Haul.PlaceHauledThingInCell(BillGiverInd, null, false);
-            yield return Toils_Reserve.Reserve(IngredientInd, 1);
-            yield return DoBill();
+
+            Toil gotoBillGiver = Toils_Goto.GotoThing(BillGiverInd, PathEndMode.InteractionCell, false);
+
+            Toil toil = ToilMaker.MakeToil("MakeNewToils");
+            toil.initAction = delegate ()
+            {
+                if (this.job.targetQueueB != null && this.job.targetQueueB.Count == 1)
+                {
+                    UnfinishedThing unfinishedThing = this.job.targetQueueB[0].Thing as UnfinishedThing;
+                    if (unfinishedThing != null && !unfinishedThing.Destroyed)
+                    {
+                        unfinishedThing.BoundBill = (Bill_ProductionWithUft)this.job.bill;
+                    }
+                }
+                this.job.bill.Notify_DoBillStarted(this.pawn);
+            };
+            yield return toil;
+
+            yield return Toils_Jump.JumpIf(gotoBillGiver, () => this.job.GetTargetQueue(IngredientInd).NullOrEmpty<LocalTargetInfo>());
+            foreach (Toil toil2 in JobDriver_DoBill.CollectIngredientsToils(IngredientInd, BillGiverInd, IngredientPlaceCellInd, false, true, this.BillGiver is Building_WorkTableAutonomous))
+            {
+                yield return toil2;
+            }
+            yield return gotoBillGiver;
+            yield return DoBill().FailOnDespawnedNullOrForbiddenPlacedThings(BillGiverInd).FailOnCannotTouch(BillGiverInd, PathEndMode.InteractionCell);
             yield return Store();
+
             yield return Toils_Reserve.Reserve(IngredientPlaceCellInd, 1);
             yield return Toils_Haul.CarryHauledThingToCell(IngredientPlaceCellInd);
             yield return Toils_Haul.PlaceHauledThingInCell(IngredientPlaceCellInd, null, false);
+
             yield return Toils_Reserve.Release(IngredientInd);
             yield return Toils_Reserve.Release(IngredientPlaceCellInd);
             yield return Toils_Reserve.Release(BillGiverInd);
-            yield break;
         }
 
         protected abstract Toil DoBill ();
 
         Toil Store ()
         {
-            return new Toil () {
-                initAction = delegate {
+            return new Toil ()
+            {
+                initAction = delegate
+                {
                     var objectThing = job.GetTarget (IngredientInd).Thing;
 
-                    if (job.bill.GetStoreMode () != BillStoreModeDefOf.DropOnFloor) {
+                    if (job.bill.GetStoreMode () != BillStoreModeDefOf.DropOnFloor)
+                    {
                         IntVec3 vec = IntVec3.Invalid;
                         if (job.bill.GetStoreMode() == BillStoreModeDefOf.BestStockpile)
                         {
@@ -71,7 +92,6 @@ namespace MendAndRecycle
                         }
                         else if (job.bill.GetStoreMode() == BillStoreModeDefOf.SpecificStockpile)
                         {
-                            
                             StoreUtility.TryFindBestBetterStoreCellForIn(objectThing, pawn, pawn.Map, StoragePriority.Unstored, pawn.Faction, job.bill.GetSlotGroup(), out vec, true);
                         }
                         else

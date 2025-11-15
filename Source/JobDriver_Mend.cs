@@ -87,7 +87,7 @@ namespace MendAndRecycle
                         MoteMaker.ThrowText(pawn.DrawPos, pawn.Map, "Failed");
                     }
 
-                    pawn.GainComfortFromCellIfPossible ();
+                    pawn.GainComfortFromCellIfPossible (1);
 
                     if (objectThing.HitPoints <= 0) {
                         // recycling whats left...
