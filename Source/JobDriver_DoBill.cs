@@ -43,14 +43,6 @@ namespace MendAndRecycle
             Toil toil = ToilMaker.MakeToil("MakeNewToils");
             toil.initAction = delegate ()
             {
-                if (this.job.targetQueueB != null && this.job.targetQueueB.Count == 1)
-                {
-                    UnfinishedThing unfinishedThing = this.job.targetQueueB[0].Thing as UnfinishedThing;
-                    if (unfinishedThing != null && !unfinishedThing.Destroyed)
-                    {
-                        unfinishedThing.BoundBill = (Bill_ProductionWithUft)this.job.bill;
-                    }
-                }
                 this.job.bill.Notify_DoBillStarted(this.pawn);
             };
             yield return toil;
